@@ -93,3 +93,20 @@ footer {
         }
     }
 }
+
+/*************** BANNER ***************/
+.banner {
+    display: flex;
+    align-items: center;
+    background-color: $off-white;
+    position: relative;
+    height: 100vh;
+
+    .main-image{
+        width: 736px;
+        margin: 0 auto;
+        @media(max-width: 1440px){
+            width: 636px;
+        }
+    }
+}

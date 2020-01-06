@@ -11,9 +11,9 @@ const Header = ({ siteTitle }) => (
         <div className="navigation">
           <nav>
             <h1>Things:</h1>
-            <Link to="/projects">I Made</Link>
-            <Link to="/about">I Like</Link>
-            <Link to="/contact">About Me</Link>
+            <Link to="/made">I Made</Link>
+            <Link to="/like">I Like</Link>
+            <Link to="/about">About Me</Link>
           </nav>
         </div>
       </div>
