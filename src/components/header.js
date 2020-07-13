@@ -10,7 +10,7 @@ const Header = ({ siteTitle }) => (
         <div className="logo"> <Link to="/">Anthony Tranduc</Link></div>
         <div className="navigation">
           <nav>
-            <h1>Things:</h1>
+            <h1>Things</h1>
             <Link to="/made">I Made</Link>
             <Link to="/like">I Like</Link>
             <Link to="/about">About Me</Link>
