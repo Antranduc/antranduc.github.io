@@ -17,11 +17,13 @@
 
   /* Accent colors (same for both modes) */
   --color-accent-primary: #5b21b6;
-  --color-accent-secondary: #bfff00;
+  --color-accent-secondary: #e6ff00;
 
   /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -35,20 +37,21 @@
   --max-width: 48rem;
 }
 
-/* Dark mode */
+/* Dark mode - dark purple base with neon yellow-green highlights */
 [data-theme="dark"] {
-  --color-bg: #1a1a1a;
+  --color-bg: #0f0a1a;
   --color-text: #e5e5e5;
-  --color-text-muted: #999999;
-  --color-border: #333333;
+  --color-text-muted: #a89ec4;
+  --color-border: #2d1f4e;
 
-  /* Slightly lighter purple for better contrast in dark mode */
-  --color-accent-primary: #7c3aed;
+  /* Neon yellow as primary accent in dark mode */
+  --color-accent-primary: #e6ff00;
+  --color-accent-secondary: #7c3aed;
 }
 
 /* Base styles */
 html {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -82,6 +85,7 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: var(--font-mono);
   line-height: 1.3;
   font-weight: 600;
 }
