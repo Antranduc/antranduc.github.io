@@ -7,7 +7,8 @@ const navLinks = [
   { href: "/resume", label: "Resume" },
 ];
 
-const currentPath = Astro.url.pathname;
+// Normalize path by removing trailing slash (except for root)
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
 <nav>
