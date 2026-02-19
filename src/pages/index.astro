@@ -4,8 +4,9 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Anthony Tranduc | Software Engineer">
   <section class="hero">
-    <h1>Anthony Tranduc</h1>
-    <p class="title">Software Engineer</p>
+    <h1 id="name"></h1>
+    <p class="title" id="subtitle"></p>
+    <p class="status" id="status"></p>
     <div class="social-links">
       <a
         href="https://github.com/Antranduc"
@@ -45,7 +46,49 @@ import Layout from "../layouts/Layout.astro";
       </a>
     </div>
   </section>
+
+
 </Layout>
+
+<script>
+  const cursor = document.createElement("span");
+  cursor.textContent = "|";
+  cursor.style.color = "var(--color-accent-primary)";
+  cursor.style.animation = "blink 0.8s step-end infinite";
+
+  function typeText(element: HTMLElement, text: string, speed: number): Promise<void> {
+    return new Promise((resolve) => {
+      element.appendChild(cursor);
+      let i = 0;
+      const interval = setInterval(() => {
+        element.insertBefore(document.createTextNode(text[i]), cursor);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, speed);
+    });
+  }
+
+  async function runSequence() {
+    const name = document.getElementById("name")!;
+    const subtitle = document.getElementById("subtitle")!;
+    const status = document.getElementById("status")!;
+
+    await typeText(name, "Anthony Tranduc", 80);
+
+    subtitle.style.visibility = "visible";
+    await typeText(subtitle, "Software Engineer", 60);
+
+    status.style.visibility = "visible";
+    await typeText(status, "> currently building simulations at Amazon Robotics", 30);
+
+    setTimeout(() => { cursor.style.display = "none"; }, 1500);
+  }
+
+  runSequence();
+</script>
 
 <style>
   .hero {
@@ -54,18 +97,33 @@ import Layout from "../layouts/Layout.astro";
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 60vh;
+    min-height: 50vh;
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: clamp(1.75rem, 1rem + 4vw, 3rem);
     margin-bottom: var(--spacing-sm);
   }
 
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
   .title {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 0.8rem + 1vw, 1.25rem);
     color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    visibility: hidden;
+    min-height: 1.6em;
+  }
+
+  .status {
+    font-size: clamp(0.8rem, 0.7rem + 0.5vw, 0.95rem);
+    color: var(--color-accent-primary);
     margin-bottom: var(--spacing-xl);
+    visibility: hidden;
+    min-height: 1.6em;
   }
 
   .social-links {
@@ -82,4 +140,6 @@ import Layout from "../layouts/Layout.astro";
     color: var(--color-accent-primary);
     transform: translateY(-2px);
   }
+
+
 </style>

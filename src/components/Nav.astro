@@ -2,9 +2,9 @@
 import ThemeToggle from "./ThemeToggle.astro";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" },
+  { href: "/", label: "home" },
+  { href: "/about", label: "about" },
+  { href: "/resume", label: "resume" },
 ];
 
 // Normalize path by removing trailing slash (except for root)
@@ -12,15 +12,17 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 
 <nav>
-  <div class="nav-links">
+  <div class="nav-path">
     {
-      navLinks.map((link) => (
-        <a
-          href={link.href}
-          class:list={[{ active: currentPath === link.href }]}
-        >
-          {link.label}
-        </a>
+      navLinks.map((link, i) => (
+        <>
+          <a
+            href={link.href}
+            class:list={[{ active: currentPath === link.href }]}
+          >
+            <span class="separator">/</span>{link.label}
+          </a>
+        </>
       ))
     }
   </div>
@@ -36,9 +38,15 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
     border-bottom: 1px solid var(--color-border);
   }
 
-  .nav-links {
+  .nav-path {
     display: flex;
+    align-items: center;
     gap: 1.5rem;
+  }
+
+  .separator {
+    color: var(--color-text-muted);
+    margin-right: 0.25rem;
   }
 
   a {
