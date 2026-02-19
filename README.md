@@ -1,4 +1,4 @@
-# tranduc.dev
+# [tranduc.dev](https://tranduc.dev)
 
 My personal website.
 
