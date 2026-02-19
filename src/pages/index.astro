@@ -84,7 +84,7 @@ import Layout from "../layouts/Layout.astro";
     status.style.visibility = "visible";
     await typeText(status, "> currently building simulations at Amazon Robotics", 30);
 
-    setTimeout(() => { cursor.style.display = "none"; }, 1500);
+    setTimeout(() => { cursor.style.visibility = "hidden"; }, 1500);
   }
 
   runSequence();
