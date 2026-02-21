@@ -1,9 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import RobotScene from "../components/RobotScene.astro";
 ---
 
 <Layout title="Anthony Tranduc | Software Engineer">
   <section class="hero">
+    <RobotScene style="wireframe" />
+    <div class="hero-content">
     <h1 id="name"></h1>
     <p class="title" id="subtitle"></p>
     <p class="status" id="status"></p>
@@ -44,6 +47,7 @@ import Layout from "../layouts/Layout.astro";
           ></path>
         </svg>
       </a>
+    </div>
     </div>
   </section>
 
@@ -92,12 +96,22 @@ import Layout from "../layouts/Layout.astro";
 
 <style>
   .hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 50vh;
+    min-height: 60vh;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   h1 {

@@ -1,0 +1,67 @@
+---
+interface Props {
+  /** Which rendering style to use. Defaults to "wireframe". */
+  style?: 'wireframe' | 'lowpoly';
+}
+
+const { style = 'wireframe' } = Astro.props;
+---
+
+<robot-scene-viewer data-style={style}>
+  <canvas></canvas>
+</robot-scene-viewer>
+
+<script>
+  import { initRobotScene } from '../scripts/robot/scene';
+  import { WireframeStyle } from '../scripts/robot/styles/wireframe';
+  import { LowPolyStyle } from '../scripts/robot/styles/lowpoly';
+  import type { RobotStyle } from '../scripts/robot/types';
+
+  class RobotSceneViewer extends HTMLElement {
+    private cleanup: (() => void) | null = null;
+
+    connectedCallback() {
+      const canvas = this.querySelector('canvas');
+      if (!canvas) return;
+
+      const styleName = this.dataset.style || 'wireframe';
+      const style = this.createStyle(styleName);
+
+      this.cleanup = initRobotScene({ canvas, style });
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.();
+      this.cleanup = null;
+    }
+
+    private createStyle(name: string): RobotStyle {
+      switch (name) {
+        case 'lowpoly':
+          return new LowPolyStyle();
+        case 'wireframe':
+        default:
+          return new WireframeStyle();
+      }
+    }
+  }
+
+  customElements.define('robot-scene-viewer', RobotSceneViewer);
+</script>
+
+<style>
+  robot-scene-viewer {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
