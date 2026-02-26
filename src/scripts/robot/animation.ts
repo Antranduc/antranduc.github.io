@@ -84,8 +84,6 @@ export class AnimationController {
    */
   private readonly detourPath: THREE.CatmullRomCurve3;
 
-  /** Previous frame's facing direction. */
-  private prevTangent: THREE.Vector3 | null = null;
 
   constructor(refs: VehicleRefs) {
     this.refs = refs;
@@ -220,20 +218,6 @@ export class AnimationController {
       driving = true;
       wheelSpeed = 6;
     }
-
-    // ── Smooth facing direction (clamped angular rate) ──
-    // Limit rotation to MAX_TURN_RAD_PER_SEC * delta so large direction changes
-    // (like reverse → arc) produce a gradual steering motion at any frame rate.
-    const MAX_TURN_RAD_PER_SEC = 2.1; // ~120°/sec
-    const maxTurnThisFrame = MAX_TURN_RAD_PER_SEC * delta;
-    if (this.prevTangent) {
-      const angle = this.prevTangent.angleTo(tangent);
-      if (angle > maxTurnThisFrame) {
-        const fraction = maxTurnThisFrame / angle;
-        tangent = this.prevTangent.clone().lerp(tangent, fraction).normalize();
-      }
-    }
-    this.prevTangent = tangent.clone();
 
     // ── Apply position + facing ──
     this.refs.vehicle.position.copy(pos);
