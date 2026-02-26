@@ -41,6 +41,17 @@ export function initRobotScene(config: RobotSceneConfig): () => void {
   camera.position.set(4, 3.5, 4);
   camera.lookAt(0, 0, 0);
 
+  function updateCamera(aspect: number) {
+    if (aspect < 1) {
+      // Portrait: frontal view so the car loop runs left-right across the screen
+      camera.position.set(0, 3.5, 6);
+    } else {
+      // Landscape: original 3/4 isometric view
+      camera.position.set(4, 3.5, 4);
+    }
+    camera.lookAt(0, 0, 0);
+  }
+
   // --- Build vehicle scene ---
   const refs = buildVehicleScene();
   scene.add(refs.vehicle);
@@ -67,11 +78,13 @@ export function initRobotScene(config: RobotSceneConfig): () => void {
 
     const width = parent.clientWidth;
     const height = parent.clientHeight;
+    const aspect = width / height;
 
     canvas.width = width;
     canvas.height = height;
     renderer.setSize(width, height, false);
-    camera.aspect = width / height;
+    camera.aspect = aspect;
+    updateCamera(aspect);
     camera.updateProjectionMatrix();
   }
 
