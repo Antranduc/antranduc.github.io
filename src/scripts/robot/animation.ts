@@ -84,6 +84,8 @@ export class AnimationController {
    */
   private readonly detourPath: THREE.CatmullRomCurve3;
 
+  /** Smoothed facing direction, updated each frame via lerp. */
+  private smoothTangent: THREE.Vector3 | null = null;
 
   constructor(refs: VehicleRefs) {
     this.refs = refs;
@@ -219,9 +221,18 @@ export class AnimationController {
       wheelSpeed = 6;
     }
 
+    // ── Smooth facing direction (time-based exponential lerp) ──
+    // Fast enough to look responsive, smooth enough to avoid hard snaps.
+    const TURN_SPEED = 20; // rad/sec
+    if (this.smoothTangent === null) {
+      this.smoothTangent = tangent.clone();
+    } else {
+      this.smoothTangent.lerp(tangent, Math.min(1, TURN_SPEED * delta)).normalize();
+    }
+
     // ── Apply position + facing ──
     this.refs.vehicle.position.copy(pos);
-    const lookTarget = pos.clone().add(tangent);
+    const lookTarget = pos.clone().add(this.smoothTangent);
     lookTarget.y = pos.y;
     this.refs.vehicle.lookAt(lookTarget);
 
