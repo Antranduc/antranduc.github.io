@@ -136,7 +136,7 @@ export class AnimationController {
     this.detourPath = new THREE.CatmullRomCurve3(detourPoints, false, 'catmullrom', 0.5);
   }
 
-  update(elapsed: number): void {
+  update(elapsed: number, delta: number): void {
     const totalT = elapsed / CYCLE_DURATION;
     const t = totalT - Math.floor(totalT);
 
@@ -222,13 +222,14 @@ export class AnimationController {
     }
 
     // ── Smooth facing direction (clamped angular rate) ──
-    // Limit rotation to MAX_TURN_RAD per frame so large direction changes
-    // (like reverse → arc) produce a gradual steering motion.
-    const MAX_TURN_RAD = 0.035; // ~2° per frame at 60fps → ~120°/sec max
+    // Limit rotation to MAX_TURN_RAD_PER_SEC * delta so large direction changes
+    // (like reverse → arc) produce a gradual steering motion at any frame rate.
+    const MAX_TURN_RAD_PER_SEC = 2.1; // ~120°/sec
+    const maxTurnThisFrame = MAX_TURN_RAD_PER_SEC * delta;
     if (this.prevTangent) {
       const angle = this.prevTangent.angleTo(tangent);
-      if (angle > MAX_TURN_RAD) {
-        const fraction = MAX_TURN_RAD / angle;
+      if (angle > maxTurnThisFrame) {
+        const fraction = maxTurnThisFrame / angle;
         tangent = this.prevTangent.clone().lerp(tangent, fraction).normalize();
       }
     }
@@ -251,7 +252,7 @@ export class AnimationController {
 
     // ── Wheel spin ──
     const totalWheelSpeed = wheelSpeed + this.bonkWheelExtra;
-    const wheelDelta = totalWheelSpeed * (1 / 60);
+    const wheelDelta = totalWheelSpeed * delta;
     for (const wheel of this.refs.wheels) {
       wheel.rotation.x += wheelDelta;
     }
