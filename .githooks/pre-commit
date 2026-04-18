@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Strip EXIF metadata (GPS, camera serial, timestamps, etc.) from photos
+# staged under src/assets/photos/ before they land in the public repo.
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR -- 'src/assets/photos/' \
+  | grep -iE '\.(jpe?g|png|webp|avif)$' || true)
+
+if [[ -z "$staged" ]]; then
+  exit 0
+fi
+
+if ! command -v exiftool >/dev/null 2>&1; then
+  echo "pre-commit: exiftool is required to strip EXIF from staged photos." >&2
+  echo "  install on macOS: brew install exiftool" >&2
+  exit 1
+fi
+
+echo "pre-commit: stripping EXIF from staged photos..."
+while IFS= read -r file; do
+  [[ -f "$file" ]] || continue
+  exiftool -all= -overwrite_original -q "$file"
+  git add "$file"
+  echo "  stripped: $file"
+done <<< "$staged"
