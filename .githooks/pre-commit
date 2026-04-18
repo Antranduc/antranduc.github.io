@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Strip EXIF metadata (GPS, camera serial, timestamps, etc.) from photos
-# staged under src/assets/photos/ before they land in the public repo.
+# For photos staged under src/assets/photos/:
+#   1. Losslessly rotate JPEGs so pixels match the EXIF Orientation tag
+#      (browsers ignore Orientation once metadata is stripped).
+#   2. Strip all EXIF metadata (GPS, camera serial, timestamps, Orientation, etc.).
 
 staged=$(git diff --cached --name-only --diff-filter=ACMR -- 'src/assets/photos/' \
   | grep -iE '\.(jpe?g|png|webp|avif)$' || true)
@@ -11,16 +13,31 @@ if [[ -z "$staged" ]]; then
   exit 0
 fi
 
-if ! command -v exiftool >/dev/null 2>&1; then
-  echo "pre-commit: exiftool is required to strip EXIF from staged photos." >&2
-  echo "  install on macOS: brew install exiftool" >&2
-  exit 1
-fi
+require_tool() {
+  local tool="$1" brew_pkg="$2"
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "pre-commit: $tool is required to process staged photos." >&2
+    echo "  install on macOS: brew install $brew_pkg" >&2
+    exit 1
+  fi
+}
+require_tool exiftool exiftool
+require_tool jhead jhead
+require_tool jpegtran jpeg-turbo
 
-echo "pre-commit: stripping EXIF from staged photos..."
+echo "pre-commit: normalizing orientation and stripping EXIF from staged photos..."
 while IFS= read -r file; do
   [[ -f "$file" ]] || continue
+  if [[ "$file" =~ \.(jpe?g|JPE?G)$ ]]; then
+    # jhead returns 0 even when jpegtran fails; check stderr for failures explicitly.
+    jhead_err=$(jhead -autorot "$file" 2>&1 >/dev/null || true)
+    if [[ -n "$jhead_err" ]]; then
+      echo "pre-commit: jhead failed on $file:" >&2
+      echo "$jhead_err" >&2
+      exit 1
+    fi
+  fi
   exiftool -all= -overwrite_original -q "$file"
   git add "$file"
-  echo "  stripped: $file"
+  echo "  processed: $file"
 done <<< "$staged"

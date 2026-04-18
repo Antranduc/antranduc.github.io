@@ -50,7 +50,10 @@ photos.sort((a, b) => b.addedAt - a.addedAt);
 ---
 
 <Layout title="Photos | Anthony Tranduc" description="Photos by Anthony Tranduc">
-  <h1>photos</h1>
+  <header class="photos-header">
+    <h1>Pictures I Took</h1>
+    <p class="subtitle">Ricoh GR III</p>
+  </header>
 
   {
     photos.length === 0 ? (
@@ -130,8 +133,17 @@ photos.sort((a, b) => b.addedAt - a.addedAt);
 </script>
 
 <style>
-  h1 {
+  .photos-header {
     margin-bottom: var(--spacing-xl);
+  }
+
+  .photos-header h1 {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 0;
   }
 
   .empty {
