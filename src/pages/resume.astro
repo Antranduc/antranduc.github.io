@@ -5,7 +5,9 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Resume | Anthony Tranduc" description="Anthony Tranduc's Resume">
   <div class="page-header">
     <h1>Resume</h1>
-    <a href="#" class="pdf-link">&gt; View as PDF</a>
+    <a href="/AnthonyTranduc-Resume.pdf" class="pdf-link" target="_blank" rel="noopener">
+      &gt; View as PDF
+    </a>
   </div>
 
   <section>
@@ -15,7 +17,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="entry-header">
         <div>
           <h3>Amazon Robotics</h3>
-          <p class="org">Westborough, MA</p>
+          <p class="org">Boston, MA</p>
         </div>
         <span class="date">Aug 2022 &ndash; Present</span>
       </div>
@@ -24,16 +26,149 @@ import Layout from "../layouts/Layout.astro";
           <span>Software Development Engineer II</span>
           <span class="date">Apr 2024 &ndash; Present</span>
         </div>
+        <ul>
+          <li>
+            Lead two engineers building a controls-in-the-loop simulator on
+            Unreal Engine with USD-based assets, integrating production PLC and
+            SoftPLC software to validate logic against virtual hardware
+          </li>
+          <li>
+            Architected a testing framework that made the simulation
+            programmatically observable and controllable for the first time
+            &mdash; previously limited to a few MQTT spawn topics &mdash; giving
+            a ~5-engineer customer team their own on-demand virtual test
+            environments where a single physical testbed had been the only
+            option
+          </li>
+          <li>
+            Designed the framework's API surface to be agent-friendly, cutting
+            delivery of a new test API from concept to shipped to a single day,
+            with autonomous agents driving implementation, testing, and
+            adversarial review under human oversight
+          </li>
+          <li>
+            Built distributed digital twins of fulfillment centers, running
+            4-floor warehouses across tens of containers with multiple
+            experiments in parallel
+          </li>
+        </ul>
       </div>
       <div class="role">
         <div class="role-header">
-          <span>Software Development Engineer</span>
+          <span>Software Development Engineer I</span>
           <span class="date">Aug 2022 &ndash; Apr 2024</span>
         </div>
+        <ul>
+          <li>
+            Built a software-in-the-loop framework that runs teams' production
+            software unmodified in simulation, replacing a legacy system that
+            required intrusive changes to every integrating service
+          </li>
+          <li>
+            Developed workcell models that mock real hardware, letting software
+            teams integrate and test against virtual systems before physical
+            deployment
+          </li>
+        </ul>
       </div>
-      <ul>
-        <li>Robotics simulation</li>
-      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div>
+          <h3>Tufts University Department of Computer Science</h3>
+          <p class="org">Medford, MA</p>
+        </div>
+        <span class="date">Jan 2020 &ndash; May 2022</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span>Algorithms Teaching Assistant</span>
+        </div>
+        <ul>
+          <li>
+            Tutored students on analyzing and applying algorithms during weekly
+            office hours
+          </li>
+          <li>Graded 50+ homework assignments weekly</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div>
+          <h3>Amazon Robotics</h3>
+          <p class="org">North Reading, MA</p>
+        </div>
+        <span class="date">May 2021 &ndash; Aug 2021</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span>Software Development Engineer Intern</span>
+        </div>
+        <ul>
+          <li>
+            Built a proof-of-concept that shaped the team's 2022 roadmap, piping
+            simulation time into a live containerized service by intercepting
+            its time calls through a preloaded library
+          </li>
+          <li>
+            Built tooling to scale Amazon Robotics' simulation infrastructure
+            using Docker, RabbitMQ, C, Python, and Java
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div>
+          <h3>Tufts JumboCode</h3>
+          <p class="org">Medford, MA</p>
+        </div>
+        <span class="date">Sep 2020 &ndash; Jun 2021</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span>Technical Lead</span>
+        </div>
+        <ul>
+          <li>
+            Led a 12-developer team building a medical resource finder web
+            application
+          </li>
+          <li>
+            Reviewed 3&ndash;5 pull requests weekly and mentored developers on
+            technical decisions
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div>
+          <h3>Codio</h3>
+          <p class="org">Cambridge, MA</p>
+        </div>
+        <span class="date">Jun 2020 &ndash; Aug 2020</span>
+      </div>
+      <div class="role">
+        <div class="role-header">
+          <span>Content and Code Development Intern</span>
+        </div>
+        <ul>
+          <li>
+            Developed auto-grading API for Processing programs using an abstract
+            syntax tree
+          </li>
+          <li>
+            Created ~100 data structures and algorithms assessments in C++,
+            Java, and Python
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -46,11 +181,40 @@ import Layout from "../layouts/Layout.astro";
           <h3>Tufts University</h3>
           <p class="org">Medford, MA</p>
         </div>
-        <span class="date">Sep 2018 &ndash; May 2022</span>
+        <span class="date">Class of 2022</span>
       </div>
-      <p class="degree">BS in Computer Science, Second Major in Philosophy</p>
-      <p class="degree">Summa Cum Laude</p>
-      <p class="org">Vietnamese Students Club &middot; JumboCode &middot; Phi Beta Kappa</p>
+      <p class="degree">
+        BS in Computer Science, Second Major in Philosophy
+      </p>
+      <p class="org">
+        GPA 3.82/4.00 &middot; Summa Cum Laude &middot; Phi Beta Kappa
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Technical Skills</h2>
+
+    <div class="entry">
+      <dl class="skills">
+        <dt>Languages</dt>
+        <dd>C++, Python, Java</dd>
+
+        <dt>AI &amp; Agentic Workflows</dt>
+        <dd>
+          AI-assisted development, agentic workflows, multi-agent systems,
+          autonomous agent loops, LLM tooling (Claude Code, opencode)
+        </dd>
+
+        <dt>Tooling &amp; Messaging</dt>
+        <dd>Docker, Linux, Git, MQTT, RabbitMQ</dd>
+
+        <dt>Simulation &amp; Robotics</dt>
+        <dd>
+          Unreal Engine, USD, digital twins, discrete event simulation,
+          distributed simulation
+        </dd>
+      </dl>
     </div>
   </section>
 </Layout>
@@ -154,22 +318,52 @@ import Layout from "../layouts/Layout.astro";
     font-weight: 700;
   }
 
+  .skills {
+    margin: 0;
+  }
+
+  .skills dt {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .skills dd {
+    margin: 0 0 var(--spacing-md);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .skills dd:last-child {
+    margin-bottom: 0;
+  }
+
   .role {
     padding-left: var(--spacing-md);
-    border-left: 2px solid var(--color-accent-primary);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
   }
 
   .role:last-child {
     margin-bottom: 0;
   }
 
+  /* Accent bar spans only the title line, not the bullets below it. */
   .role-header {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: var(--spacing-md);
     padding: var(--spacing-xs) 0;
+  }
+
+  .role-header::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--spacing-md));
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-accent-primary);
   }
 
   .role-header span:first-child {
