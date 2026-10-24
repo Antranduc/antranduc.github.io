@@ -1,107 +1,208 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import RobotScene from "../components/RobotScene.astro";
 import SocialLinks from "../components/SocialLinks.astro";
+import ArtPlate from "../components/ArtPlate.astro";
+import { Image } from "astro:assets";
+import { getPhotos } from "../lib/photos";
+import orrery from "../assets/art/orrery.webp";
+import hero from "../assets/art/decaus.webp";
+
+const recentPhotos = getPhotos().slice(0, 3);
 ---
 
 <Layout title="Anthony Tranduc | Software Engineer">
   <section class="hero">
-    <RobotScene style="wireframe" />
-    <div class="hero-content">
-    <h1 id="name"></h1>
-    <p class="title" id="subtitle"></p>
-    <p class="status" id="status"></p>
-    <SocialLinks />
+    <div class="hero-copy" data-parallax="-0.12">
+      <p class="eyebrow">Software Engineer</p>
+      <h1>Anthony <em>Tranduc</em></h1>
+      <p class="status mono">&gt; currently building simulations at Amazon Robotics</p>
+      <SocialLinks />
     </div>
+    <ArtPlate
+      src={hero}
+      alt="Salomon de Caus, water wheel driving a geared bell mechanism, Les raisons des forces mouvantes, 1615"
+      widths={[480, 800, 1100]}
+      sizes="(min-width: 900px) 45vw, 100vw"
+      focus="50% 40%"
+      priority
+      parallax={0.12}
+      class="hero-plate"
+    />
   </section>
 
+  <section class="now bleed rule-top rule-bottom">
+    <ArtPlate
+      src={orrery}
+      alt="William Pether after Joseph Wright of Derby, A Philosopher Giving a Lecture on the Orrery, 1768"
+      widths={[800, 1200, 1500, 1800]}
+      sizes="(max-width: 640px) 350vw, calc(100vw - 32px)"
+      quality={30}
+      focus="50% 30%"
+      class="now-plate"
+    >
+      <div class="now-copy">
+        <h2><span class="marker" aria-hidden="true">01</span>&nbsp;Robotics <em>simulation</em></h2>
+        <p>Software engineer working on robotics simulation at Amazon Robotics.</p>
+      </div>
+    </ArtPlate>
+  </section>
 
+  <section class="teaser">
+    <div class="teaser-head">
+      <div>
+        <h2><span class="marker" aria-hidden="true">02</span>&nbsp;Pictures <em>I Took</em></h2>
+        <p class="eyebrow">Ricoh GR III</p>
+      </div>
+      <a class="more label" href="/photos">View all &rarr;</a>
+    </div>
+    <div class="teaser-grid">
+      {recentPhotos.map(({ image }) => (
+        <a href="/photos" class="teaser-tile" aria-label="View photos">
+          <Image
+            src={image}
+            alt=""
+            widths={[320, 480, 640]}
+            sizes="33vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))}
+    </div>
+  </section>
 </Layout>
-
-<script>
-  const cursor = document.createElement("span");
-  cursor.textContent = "|";
-  cursor.style.color = "var(--color-accent-primary)";
-  cursor.style.animation = "blink 0.8s step-end infinite";
-
-  function typeText(element: HTMLElement, text: string, speed: number): Promise<void> {
-    return new Promise((resolve) => {
-      element.appendChild(cursor);
-      let i = 0;
-      const interval = setInterval(() => {
-        element.insertBefore(document.createTextNode(text[i]), cursor);
-        i++;
-        if (i >= text.length) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, speed);
-    });
-  }
-
-  async function runSequence() {
-    const name = document.getElementById("name")!;
-    const subtitle = document.getElementById("subtitle")!;
-    const status = document.getElementById("status")!;
-
-    await typeText(name, "Anthony Tranduc", 80);
-
-    subtitle.style.visibility = "visible";
-    await typeText(subtitle, "Software Engineer", 60);
-
-    status.style.visibility = "visible";
-    await typeText(status, "> currently building simulations at Amazon Robotics", 30);
-
-    setTimeout(() => { cursor.style.visibility = "hidden"; }, 1500);
-  }
-
-  runSequence();
-</script>
 
 <style>
   .hero {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    gap: var(--spacing-2xl);
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 60vh;
-    overflow: hidden;
+    min-height: calc(100svh - 10rem);
+    padding-bottom: var(--spacing-3xl);
   }
 
-  .hero-content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .hero-copy {
+    transform: translate3d(0, var(--py, 0px), 0);
   }
 
-  h1 {
-    font-size: clamp(1.75rem, 1rem + 4vw, 3rem);
-    margin-bottom: var(--spacing-sm);
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  .title {
-    font-size: clamp(1rem, 0.8rem + 1vw, 1.25rem);
-    color: var(--color-text-muted);
-    margin-bottom: var(--spacing-md);
-    visibility: hidden;
-    min-height: 1.6em;
+  .hero-copy h1 {
+    margin: var(--spacing-md) 0 var(--spacing-lg);
   }
 
   .status {
     font-size: clamp(0.8rem, 0.7rem + 0.5vw, 0.95rem);
     color: var(--color-accent-primary);
     margin-bottom: var(--spacing-xl);
-    visibility: hidden;
-    min-height: 1.6em;
   }
 
+  /* The car drives on the engraving: neon car, grid in the plate's line color */
+  .hero :global(.hero-plate) {
+    aspect-ratio: 4 / 5;
+    max-height: 72svh;
+    width: 100%;
+  }
+
+
+  @media (min-width: 900px) {
+    .hero {
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .hero :global(.hero-plate) {
+      max-height: 78svh;
+      justify-self: end;
+    }
+  }
+
+  .now :global(.now-plate) {
+    min-height: clamp(26rem, 70svh, 44rem);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* Full-width scrim; text aligns with the page container */
+  .now-copy {
+    position: relative;
+    width: 100%;
+    padding: var(--spacing-3xl) var(--gutter) var(--spacing-2xl);
+    padding-inline: max(var(--gutter), (100% - var(--max-width)) / 2 + var(--gutter));
+    /* Solid field behind the text, fading out above it, so neon lines never
+       run under the copy */
+    background: linear-gradient(to top, var(--art-field) 55%, transparent);
+  }
+
+
+  .now-copy h2 {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .now-copy p:last-child {
+    max-width: 36rem;
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .teaser {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  .teaser-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .teaser-head .eyebrow {
+    margin: var(--spacing-md) 0 0;
+  }
+
+  .more {
+    font-weight: 600;
+  }
+
+  .teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  @media (min-width: 640px) {
+    .teaser-grid {
+      gap: var(--spacing-md);
+    }
+  }
+
+  .teaser-tile {
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--color-border);
+  }
+
+  .teaser-tile :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .teaser-tile:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .teaser-tile:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .teaser-tile :global(img) {
+      transition: none;
+    }
+  }
 </style>

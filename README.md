@@ -17,6 +17,14 @@ npm run build
 
 Output is in `dist/`.
 
+## Artwork
+
+The tinted engravings live in `src/assets/art/` and are baked with `scripts/prepare-art.mjs`, which maps each scan's brightness to a three-color tritone (tuning config at the top of the script). Sources and licenses are in `src/assets/art/CREDITS.md`; only public-domain or CC0 works are used.
+
+```bash
+node scripts/prepare-art.mjs <dir-with-source-jpgs>
+```
+
 ## Photos
 
 Photos live in `src/assets/photos/` and are rendered on `/photos`, sorted newest-first by git commit timestamp. To publish a photo, drop it into that folder, commit, and push — the GitHub Pages workflow rebuilds the site.

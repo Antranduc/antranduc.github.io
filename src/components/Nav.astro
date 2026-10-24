@@ -1,6 +1,4 @@
 ---
-import ThemeToggle from "./ThemeToggle.astro";
-
 const navLinks = [
   { href: "/", label: "home" },
   { href: "/photos", label: "photos" },
@@ -25,16 +23,45 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
       ))
     }
   </div>
-  <ThemeToggle />
 </nav>
 
 <style>
+  /*
+   * Fixed header row inside the page frame (see body::before in global.css).
+   * Inline padding lines the links up with the .container content (100% is
+   * the viewport here, since the nav is fixed).
+   */
   nav {
+    position: fixed;
+    z-index: 202;
+    top: calc(var(--frame-inset) + 1px);
+    left: calc(var(--frame-inset) + 1px);
+    right: calc(var(--frame-inset) + 1px);
+    height: calc(var(--nav-height) - 1px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--color-border);
+    padding-inline: calc(
+      max(var(--gutter), (100% - var(--max-width)) / 2 + var(--gutter)) -
+        var(--frame-inset) - 1px
+    );
+    background: var(--color-bg);
+    font-family: var(--font-label);
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Divider runs past the frame's vertical lines to the viewport edges,
+     crossing them like a crosshair */
+  nav::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: calc(-1 * (var(--frame-inset) + 1px));
+    right: calc(-1 * (var(--frame-inset) + 1px));
+    height: 1px;
+    background: var(--color-frame);
   }
 
   .nav-path {

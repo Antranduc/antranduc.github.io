@@ -17,14 +17,17 @@ const { title, description = "Software Engineer" } = Astro.props;
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f0a1a" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
   <body>
+    <div class="page-frame" aria-hidden="true"></div>
     <div class="container">
       <Nav />
       <main>
@@ -32,10 +35,8 @@ const { title, description = "Software Engineer" } = Astro.props;
       </main>
       <Footer />
     </div>
-    <script is:inline>
-      // Theme persistence - default to dark
-      const theme = localStorage.getItem("theme") || "dark";
-      document.documentElement.setAttribute("data-theme", theme);
+    <script>
+      import "../scripts/parallax";
     </script>
   </body>
 </html>
