@@ -1,43 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ArtPlate from "../components/ArtPlate.astro";
 import { Image, getImage } from "astro:assets";
-import { execFileSync } from "node:child_process";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-type PhotoModule = { default: ImageMetadata };
-
-const photoModules = import.meta.glob<PhotoModule>(
-  "../assets/photos/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}",
-  { eager: true }
-);
-
-const currentDir = path.dirname(fileURLToPath(import.meta.url));
-
-function getAddedAt(filePath: string): number {
-  try {
-    const out = execFileSync(
-      "git",
-      ["log", "-1", "--format=%ct", "--", filePath],
-      { encoding: "utf8" }
-    ).trim();
-    if (out) return parseInt(out, 10) * 1000;
-  } catch {
-    // git not available or file not tracked — fall through
-  }
-  try {
-    return fs.statSync(filePath).mtimeMs;
-  } catch {
-    return 0;
-  }
-}
+import { getPhotos } from "../lib/photos";
+import lute from "../assets/art/lute.webp";
 
 const photos = await Promise.all(
-  Object.entries(photoModules).map(async ([relativePath, mod]) => {
-    const image = mod.default;
-    const absPath = path.resolve(currentDir, relativePath);
-    const addedAt = getAddedAt(absPath);
+  getPhotos().map(async ({ image, addedAt }) => {
     const full = await getImage({
       src: image,
       width: Math.min(image.width, 1600),
@@ -45,14 +14,23 @@ const photos = await Promise.all(
     return { image, addedAt, fullSrc: full.src };
   })
 );
-
-photos.sort((a, b) => b.addedAt - a.addedAt);
 ---
 
 <Layout title="Photos | Anthony Tranduc" description="Photos by Anthony Tranduc">
   <header class="photos-header">
-    <h1>Pictures I Took</h1>
-    <p class="subtitle">Ricoh GR III</p>
+    <div>
+      <p class="eyebrow">Ricoh GR III</p>
+      <h1>Pictures <em>I Took</em></h1>
+    </div>
+    <ArtPlate
+      src={lute}
+      alt="Albrecht Dürer, The Draughtsman of the Lute, 1525"
+      widths={[400, 700, 1000]}
+      sizes="(min-width: 900px) 40vw, 100vw"
+      focus="45% 35%"
+      priority
+      class="header-plate"
+    />
   </header>
 
   {
@@ -134,16 +112,24 @@ photos.sort((a, b) => b.addedAt - a.addedAt);
 
 <style>
   .photos-header {
-    margin-bottom: var(--spacing-xl);
+    display: grid;
+    gap: var(--spacing-xl);
+    align-items: end;
+    margin-bottom: var(--spacing-2xl);
   }
 
-  .photos-header h1 {
-    margin-bottom: var(--spacing-xs);
+  .photos-header .eyebrow {
+    margin-bottom: var(--spacing-md);
   }
 
-  .subtitle {
-    color: var(--color-text-muted);
-    margin-bottom: 0;
+  .photos-header :global(.header-plate) {
+    height: clamp(10rem, 25vw, 18rem);
+  }
+
+  @media (min-width: 900px) {
+    .photos-header {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   .empty {
@@ -229,7 +215,7 @@ photos.sort((a, b) => b.addedAt - a.addedAt);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 5px;
     cursor: pointer;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 1.5rem;
     width: 2.75rem;
     height: 2.75rem;
